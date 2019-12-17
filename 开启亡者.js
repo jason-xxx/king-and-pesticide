@@ -8,7 +8,8 @@ const template = require('art-template')
 //引入url
 const urlModel=require('url')
  
-
+//引入自定义bindRender模块
+let bindRender= require('./bindRender')
 //--------------------------------
 //2.创建服务器对象
 const fwq=http.createServer();
@@ -20,6 +21,8 @@ fwq.listen(3021,()=>{
 
 //4.监听用户请求
 fwq.on('request',(req,res)=>{
+    //调用binRender方法
+    bindRender(req,res)
     let method=req.method;
     let url=req.url;
     let pathname=urlModel.parse(url,true).pathname
@@ -35,26 +38,28 @@ fwq.on('request',(req,res)=>{
              //将heros.json中的转换成对象
              let heroArr=JSON.parse(data);
              //引入模板引擎
-             let str =template(path.join(__dirname,'./views/index.html'),{data:heroArr})
+            //  let str =template(path.join(__dirname,'./views/index.html'),{data:heroArr})
             //渲染页面
-             res.end(str);
+            //  res.end(str);
+            //调用bindRender中的res.render
+            res.render('index',{data:heroArr})
              
          })
     }else if(method=='GET'&&(pathname=='/add'||pathname=='/add.html')){
-        fs.readFile(path.join(__dirname,'./views/add.html'),'utf8',(err,data)=>{
-        if(err) return console.log(err.message);
-        res.end(data)
-    })
+        // fs.readFile(path.join(__dirname,'./views/add.html'),'utf8',(err,data)=>{
+        // if(err) return console.log(err.message);
+        // res.end(data)
+        res.render('add',{})
     }else if(method=='GET'&&(pathname=='/edit'||pathname=='/edit.html')){
-        fs.readFile(path.join(__dirname,'./views/edit.html'),'utf8',(err,data)=>{
-        if(err) return console.log(err.message);
-        res.end(data)
-    })
+        // fs.readFile(path.join(__dirname,'./views/edit.html'),'utf8',(err,data)=>{
+        // if(err) return console.log(err.message);
+        // res.end(data)
+        res.render('edit',{})
     }else if(method=='GET'&&(pathname=='/info'||pathname=='/info.html')){
-        fs.readFile(path.join(__dirname,'./views/info.html'),'utf8',(err,data)=>{
-        if(err) return console.log(err.message);
-        res.end(data)
-    })
+        // fs.readFile(path.join(__dirname,'./views/info.html'),'utf8',(err,data)=>{
+        // if(err) return console.log(err.message);
+        // res.end(data)
+        res.render('info',{})
     }else if(method=='GET'&&pathname=='/node_modules/bootstrap/dist/css/bootstrap.css'){
         fs.readFile(path.join(__dirname,'./node_modules/bootstrap/dist/css/bootstrap.css'),'utf8',(err,data)=>{
         if(err)return console.log();

@@ -29,7 +29,21 @@ module.exports={
     //显示详情页面
     showInfoPage(req,res) {
         res.render('info', {})
+    },
+    //添加css、js等
+    loadStaticResource(req, res) {
+        fs.readFile(path.join(__dirname, req.pathname), (err, data) => {
+            if (err) return console.log(err.message);
+            if (req.pathname.endsWith('.css')) {
+                res.writeHeader(200, {
+                    'Content-Type': 'text/css;charset=utf-8;'
+                    //js在浏览器自己会解析使用没有转换
+                })
+            }
+            res.end(data)
+        })
     }
+
 }
 //暴露出去
 

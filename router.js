@@ -3,6 +3,8 @@ const fs =require('fs')
 const urlModel=require('url')
 const path=require('path')
 
+//引入自定义控制器模块
+let Ctrl=require('./controller')
 
 //封装路由
 function router(req,res){
@@ -11,18 +13,13 @@ function router(req,res){
   let pathname=urlModel.parse(url,true).pathname
   let query=urlModel.parse(url,true).query
   if(method=='GET'&&(pathname=='/'||pathname=='/index'||pathname=='/index.html')){
-    fs.readFile(path.join(__dirname,'./heros.json'),'utf8',(err,data)=>{
-      if(err)return console.log(err.message);
-      let heroArr=JSON.parse(data);
-      //调用binRender.js中的函数
-      res.render('index',{data:heroArr})  
-      })
+    Ctrl.showIndexPage(req,res)
   } else if (method == 'GET' && (pathname == '/add' || pathname == '/add.html')) {
-    res.render('add', {})
+    Ctrl.showAddPage(req,res)
 } else if (method == 'GET' && (pathname == '/edit' || pathname == '/edit.html')) {
-    res.render('edit', {})
+    Ctrl.showEditPage(req,res)
 } else if (method == 'GET' && (pathname == '/info' || pathname == '/info.html')) {
-    res.render('info', {})
+    Ctrl.showInfoPage(req,res)
 } else if (method == 'GET' && pathname == '/node_modules/bootstrap/dist/css/bootstrap.css') {
     fs.readFile(path.join(__dirname, './node_modules/bootstrap/dist/css/bootstrap.css'), (err, data) => {
         if (err) return console.log(err.message);

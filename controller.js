@@ -3,6 +3,7 @@ const fs=require('fs')
 const path=require('path')
 
 
+let heroData = require('./modelData')
 //处理方法
 /*不同的业务的处理逻辑不同，意味着我们需要些很多的方法来处理，
 由于对外需要暴露很多的方法，以至于要暴露的方法非常多，
@@ -12,8 +13,11 @@ const path=require('path')
 
 module.exports={
     showIndexPage(req,res) {
-        fs.readFile(path.join(__dirname, './heros.json'), 'utf8', (err, data) => {
-            if (err) return console.log(err.message);
+        heroData.getAllHero((err,data)=>{
+            if(err) return res.end(JSON.stringify({
+                code: 201,
+                msg: '数据获取失败'
+            }))
             let heroArr = JSON.parse(data);
             res.render('index', { data: heroArr })
         })
@@ -26,9 +30,17 @@ module.exports={
     showEditPage(req,res) {
         res.render('edit', {})
     },
-    //显示详情页面
+    //显示单个英雄详情信息页面
     showInfoPage(req,res) {
-        res.render('info', {})
+        let id = req.query.id;
+        heroData.getOneHero(id,(err,data)=>{
+            if(err) return res.end(JSON.stringify({
+                code: 201,
+                msg: '你查找的英雄不存在'
+            }))
+            res.render('info',data)  
+        })
+        
     },
     //添加css、js等
     loadStaticResource(req, res) {

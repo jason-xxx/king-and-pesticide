@@ -13,6 +13,7 @@ function router(req,res){
   let pathname=urlModel.parse(url,true).pathname
   let query=urlModel.parse(url,true).query
 
+  req.query = query;
   //相当于给req添加一个pathname的属性用来存储pathname的值
   req.pathname = pathname;
 

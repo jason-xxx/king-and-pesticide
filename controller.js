@@ -28,11 +28,20 @@ module.exports={
     },
     //显示编辑页面
     showEditPage(req,res) {
-        res.render('edit', {})
+        //英雄id存在query中
+        let {id}=req.query
+        heroData.getOneHero(id,(err,data)=>{
+            if(err)return res.end(JSON.stringify({
+                code:201,
+                msg:'英雄不存在'
+            }))
+        //render中传输的对象必须是有数据的
+        res.render('edit', data)
+    })
     },
-    //显示单个英雄详情信息页面
+    //1.显示单个英雄详情信息页面
     showInfoPage(req,res) {
-        let id = req.query.id;
+        let {id} = req.query;
         heroData.getOneHero(id,(err,data)=>{
             if(err) return res.end(JSON.stringify({
                 code: 201,
@@ -42,6 +51,7 @@ module.exports={
         })
         
     },
+        //2.添加英雄信息
     addHeroInfo(req,res){
         //获取用户添加的数据
         //定义一个变量暂存用户传输的数据
@@ -65,6 +75,28 @@ module.exports={
             })
         })
 
+    },
+    //3.编辑英雄信息
+    editHeroInfo(req,res){
+    //因为post请求，所以需要使用变量暂存数据，注册事件来完成数据接收
+      let str ='';
+      req.on('data',chunk=>{
+          str+=chunk;
+      })
+      req.on('end',()=>{
+          let editHero=querystring.parse(str)
+          //调用数据层中的方法来对数据做进一步操作
+          heroData.editHeroInfo(editHero,(result)=>{
+              if(result) return res.end(JSON.stringify({
+                  code:200,
+                  msg:'修改成功'
+              }))
+              res.end(JSON.stringify({
+                  code:201,
+                  msg:'修改失败'
+              }))
+          })
+      })
     },
     //添加css、js等
     loadStaticResource(req, res) {

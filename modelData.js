@@ -50,8 +50,30 @@ module.exports = {
 
         })
       })
-    }
-
+    },
+    //编辑英雄
+    editHeroInfo(hero,callback){
+      //获取所有的英雄
+      this.getAllHero((err,data)=>{
+        if(err) return callback(false)
+        let heroArr=JSON.parse(data)
+        hero.date=moment().format('YYYY-MM-DD HH:mm:ss')
+        console.log(hero);
+        //在所以数据中找到我们想要的数据
+        heroArr.some((item,index)=>{
+          if(hero.id==item.id){
+        //将有的数据删除，将修改的数据将其覆盖
+        heroArr.splice(index,1,hero)
+        return;
+          }
+        })
+     //将数据上传到json中
+     fs.writeFile(path.join(__dirname,'./heros.json'),JSON.stringify(heroArr),err=>{
+       if(err)return callback(false)
+       callback(true)
+     })
+      })
+    } 
 }
 
 

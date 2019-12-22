@@ -28,7 +28,11 @@ function router(req,res){
 }else if (method == 'POST' && pathname == '/addHeroInfo') {
     //调用控制器中的方法
     Ctrl.addHeroInfo(req, res)
-} else if(method == 'GET' && pathname.startsWith('/node_modules')) {
+}else if(method=='POST'&&pathname=='/editHeroInfo'){
+    Ctrl.addHeroInfo(req,res)
+
+} 
+else if(method == 'GET' && pathname.startsWith('/node_modules')) {
     Ctrl.loadStaticResource(req,res) 
 } else {
     res.end('404');

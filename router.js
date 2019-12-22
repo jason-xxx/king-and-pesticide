@@ -25,6 +25,9 @@ function router(req,res){
     Ctrl.showEditPage(req,res)
 } else if (method == 'GET' && (pathname == '/info' || pathname == '/info.html')) {
     Ctrl.showInfoPage(req,res)
+}else if (method == 'POST' && pathname == '/addHeroInfo') {
+    //调用控制器中的方法
+    Ctrl.addHeroInfo(req, res)
 } else if(method == 'GET' && pathname.startsWith('/node_modules')) {
     Ctrl.loadStaticResource(req,res) 
 } else {

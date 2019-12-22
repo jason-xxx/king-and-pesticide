@@ -3,7 +3,6 @@ const fs=require('fs')
 const path=require('path')
 const querystring = require('querystring')
 
-
 let heroData = require('./modelData')
 //处理方法
 /*不同的业务的处理逻辑不同，意味着我们需要些很多的方法来处理，
